@@ -2,33 +2,53 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TheLightStore - Главная</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TheLightStore - Ламповый магазин</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <h1>TheLightStore</h1>
-        <nav>
-            <a href="#">Главная</a>
-            <a href="cart.html">Корзина</a>
-        </nav>
+    <header class="header">
+        <div class="container">
+            <div class="header__logo">
+                <h1>TheLightStore</h1>
+            </div>
+            <nav class="header__nav">
+                <a href="#" class="active">Главная</a>
+                <a href="cart.html" class="cart-link">
+                    Корзина <span class="cart-count">0</span>
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <main>
-        <section class="products">
-            <div class="product-card">
-                <img src="img/lamp1.jpg" alt="Лампа накаливания">
-                <h3>Лампа накаливания</h3>
-                <p>120 руб./шт</p>
-                <button>В корзину</button>
-            </div>
-            
-            <!-- Остальные товары аналогично -->
-        </section>
+    <main class="main">
+        <div class="container">
+            <section class="products-grid">
+                <!-- Карточка товара 1 -->
+                <article class="product-card">
+                    <div class="product-card__image">
+                        <img src="img/lamp1.jpg" alt="Лампа накаливания">
+                    </div>
+                    <div class="product-card__info">
+                        <h3>Лампа накаливания</h3>
+                        <p class="product-power">30W</p>
+                        <p class="product-price">120 руб./шт</p>
+                        <button class="btn-add-to-cart">В корзину</button>
+                    </div>
+                </article>
+
+                <!-- Остальные товары -->
+                <!-- ... -->
+            </section>
+        </div>
     </main>
 
-    <footer>
-        <p>© 2025 TheLightStore</p>
+    <footer class="footer">
+        <div class="container">
+            <p>© 2025 TheLightStore. Все права защищены.</p>
+        </div>
     </footer>
+
+    <script src="js/main.js"></script>
 </body>
 </html>

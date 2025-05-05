@@ -2,24 +2,58 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TheLightStore - Лампа накаливания 30W</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Лампа накаливания 30W | TheLightStore</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <!-- То же меню, что и на главной -->
+    <header class="header">
+        <div class="container">
+            <div class="header__logo">
+                <h1>TheLightStore</h1>
+            </div>
+            <nav class="header__nav">
+                <a href="index.html">Главная</a>
+                <a href="cart.html" class="cart-link">
+                    Корзина <span class="cart-count">1</span>
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <main class="product-page">
-        <div class="product-image">
-            <img src="img/lamp-detail.jpg" alt="Лампа накаливания 30W">
-        </div>
-        <div class="product-info">
-            <h2>Лампа накаливания 30W</h2>
-            <p class="price">120 руб./шт</p>
-            <p class="description">Потрясающая лампа накаливания. Лучшая в своем сегменте. Непревзойденное качество.</p>
-            <button class="add-to-cart">В корзину</button>
+    <main class="main">
+        <div class="container">
+            <section class="product-detail">
+                <div class="product-gallery">
+                    <div class="main-image">
+                        <img src="img/lamp-detail.jpg" alt="Лампа накаливания 30W">
+                    </div>
+                </div>
+                
+                <div class="product-info">
+                    <h2>Лампа накаливания 30W</h2>
+                    <p class="product-meta">
+                        <span class="power">Мощность: 30W</span>
+                        <span class="price">120 руб./шт</span>
+                    </p>
+                    
+                    <div class="product-description">
+                        <p>Потрясающая лампа накаливания. Лучшая в своем сегменте. Непревзойденное качество. Уникальный дизайн. В лучах света данной лампы вы становитесь еще ослепительнее прекраснее.</p>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <div class="quantity-selector">
+                            <button class="quantity-btn minus">-</button>
+                            <input type="number" value="1" min="1" class="quantity-input">
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                        <button class="btn-add-to-cart">В корзину</button>
+                    </div>
+                </div>
+            </section>
         </div>
     </main>
+
+    <script src="js/main.js"></script>
 </body>
 </html>

@@ -2,37 +2,73 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>TheLightStore - Корзина</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Корзина | TheLightStore</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <header>
-        <!-- Навигация -->
+    <header class="header">
+        <div class="container">
+            <div class="header__logo">
+                <h1>TheLightStore</h1>
+            </div>
+            <nav class="header__nav">
+                <a href="index.html">Главная</a>
+                <a href="cart.html" class="cart-link active">
+                    Корзина <span class="cart-count">2</span>
+                </a>
+            </nav>
+        </div>
     </header>
 
-    <main class="cart-page">
-        <h2>Корзина</h2>
-        <table class="cart-items">
-            <tr>
-                <th>Фото</th>
-                <th>Название</th>
-                <th>Мощность</th>
-                <th>Цена</th>
-                <th>Количество</th>
-                <th>Действие</th>
-            </tr>
-            <tr>
-                <td><img src="img/lamp1.jpg" alt="Лампа"></td>
-                <td>Лампа накаливания</td>
-                <td>30W</td>
-                <td>120 руб.</td>
-                <td>3</td>
-                <td><button class="remove-item">Удалить</button></td>
-            </tr>
-            <!-- Остальные товары -->
-        </table>
-        
-        <button class="checkout">Оформить заказ</button>
+    <main class="main">
+        <div class="container">
+            <h2 class="page-title">Товары в корзине</h2>
+            
+            <div class="cart-container">
+                <table class="cart-table">
+                    <thead>
+                        <tr>
+                            <th>Фото</th>
+                            <th>Название</th>
+                            <th>Мощность</th>
+                            <th>Цена</th>
+                            <th>Количество</th>
+                            <th>Сумма</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="product-image">
+                                <img src="img/lamp1.jpg" alt="Лампа накаливания">
+                            </td>
+                            <td class="product-name">Лампа накаливания</td>
+                            <td class="product-power">30W</td>
+                            <td class="product-price">120 руб.</td>
+                            <td class="product-quantity">
+                                <input type="number" value="3" min="1" class="quantity-input">
+                            </td>
+                            <td class="product-total">360 руб.</td>
+                            <td class="product-remove">
+                                <button class="btn-remove">×</button>
+                            </td>
+                        </tr>
+                        <!-- Другие товары -->
+                    </tbody>
+                </table>
+                
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Итого:</span>
+                        <span class="total-price">480 руб.</span>
+                    </div>
+                    <button class="btn-checkout">Оформить заказ</button>
+                </div>
+            </div>
+        </div>
     </main>
+
+    <script src="js/main.js"></script>
 </body>
 </html>
