@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Корзина | TheLightStore</title>
     <style>
-        /* Стили остаются без изменений */
         :root {
             --main-pink: #ff69b4;
             --light-pink: #ffb6c1;
@@ -195,7 +194,7 @@
                 </tr>
             </thead>
             <tbody id="cart-items">
-                <!-- Товары будут добавлены динамически -->
+               
             </tbody>
         </table>
 
@@ -208,10 +207,7 @@
     </main>
 
     <script>
-        // Получаем данные корзины из localStorage
         let cart = JSON.parse(localStorage.getItem('cart')) || {};
-        
-        // Загружаем данные товаров из localStorage
         const storedProducts = localStorage.getItem('products');
         const products = storedProducts ? JSON.parse(storedProducts) : [];
 
@@ -219,32 +215,34 @@
             const container = document.getElementById('cart-items');
             let totalSum = 0;
             
-            container.innerHTML = Object.keys(cart).map(productId => {
-                const product = products.find(p => p.id === parseInt(productId));
-                if (!product || cart[productId] < 1) return '';
-                
-                const quantity = cart[productId];
-                totalSum += product.price * quantity;
-                
-                return `
-                    <tr>
-                        <td><img src="img/${product.image}" class="product-image" alt="${product.name}"></td>
-                        <td>${product.name}</td>
-                        <td>${product.description.match(/\d+W/)?.[0] || '-'}</td>
-                        <td>${product.price} ₽</td>
-                        <td>
-                            <div class="quantity-control">
-                                <button class="quantity-btn" onclick="updateQuantity(${product.id}, -1)">-</button>
-                                <span>${quantity}</span>
-                                <button class="quantity-btn" onclick="updateQuantity(${product.id}, 1)">+</button>
-                            </div>
-                        </td>
-                        <td>
-                            <button class="remove-btn" onclick="removeItem(${product.id})">Удалить</button>
-                        </td>
-                    </tr>
-                `;
-            }).filter(item => item !== '').join('');
+            container.innerHTML = Object.keys(cart)
+                .filter(productId => cart[productId] > 0)
+                .map(productId => {
+                    const product = products.find(p => p.id === parseInt(productId));
+                    if (!product) return '';
+                    
+                    const quantity = cart[productId];
+                    totalSum += product.price * quantity;
+                    
+                    return `
+                        <tr>
+                            <td><img src="img/${product.image}" class="product-image" alt="${product.name}"></td>
+                            <td>${product.name}</td>
+                            <td>${product.description.match(/\d+W/)?.[0] || '-'}</td>
+                            <td>${product.price} ₽</td>
+                            <td>
+                                <div class="quantity-control">
+                                    <button class="quantity-btn" onclick="updateQuantity(${product.id}, -1)">-</button>
+                                    <span>${quantity}</span>
+                                    <button class="quantity-btn" onclick="updateQuantity(${product.id}, 1)">+</button>
+                                </div>
+                            </td>
+                            <td>
+                                <button class="remove-btn" onclick="removeItem(${product.id})">Удалить</button>
+                            </td>
+                        </tr>
+                    `;
+                }).join('');
 
             document.getElementById('total-sum').textContent = totalSum;
             updateCartCount();
@@ -254,10 +252,7 @@
             const productId = id.toString();
             cart[productId] = (cart[productId] || 0) + delta;
             
-            if (cart[productId] < 1) {
-                delete cart[productId];
-            }
-            
+            if (cart[productId] < 1) delete cart[productId];
             localStorage.setItem('cart', JSON.stringify(cart));
             renderCart();
         }
@@ -274,8 +269,31 @@
             document.querySelectorAll('.cart-count').forEach(el => el.textContent = total);
         }
 
+        document.querySelector('.checkout-btn').addEventListener('click', () => {
+            
+            Object.keys(cart).forEach(productId => {
+                if (cart[productId] < 1) delete cart[productId];
+            });
+            
+            // Пересчет
+            const totalSum = Object.entries(cart).reduce((sum, [id, quantity]) => {
+                const product = products.find(p => p.id === parseInt(id));
+                return sum + (product?.price || 0) * quantity;
+            }, 0);
+
+            // Сохранение заказа
+            const orderData = {
+                items: cart,
+                total: totalSum,
+                date: new Date().toLocaleDateString('ru-RU')
+            };
+            
+            localStorage.setItem('currentOrder', JSON.stringify(orderData));
+            localStorage.setItem('cart', JSON.stringify(cart)); // Обновляем корзину
+            window.location.href = 'order.html';
+        });
+
         document.addEventListener('DOMContentLoaded', () => {
-            // Сохраняем продукты в localStorage
             if (!storedProducts) {
                 localStorage.setItem('products', JSON.stringify([
                 {
@@ -420,7 +438,6 @@
             }
                 ]));
             }
-            
             renderCart();
             updateCartCount();
         });

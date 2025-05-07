@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Карточка товара | TheLightStore</title>
     <style>
-        /* Все стили из главной страницы */
+       
         :root {
             --main-pink: #ff69b4;
             --light-pink: #ffb6c1;
@@ -370,7 +370,7 @@
         const productId = parseInt(urlParams.get('id'));
         const product = products.find(p => p.id === productId);
 
-        // Корзина
+        
         let cart = JSON.parse(localStorage.getItem('cart')) || {};
         
         function updateCartCount() {

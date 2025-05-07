@@ -24,7 +24,7 @@
             color: var(--dark-text);
         }
 
-        /* Шапка */
+        
         .header {
             background: linear-gradient(135deg, var(--main-pink), #ff1493);
             padding: 1rem;
@@ -89,7 +89,7 @@
             border-radius: 8px;
         }
 
-        /* Основной контент */
+        
         main {
             margin-top: 80px;
             padding: 1rem;
@@ -146,7 +146,7 @@
             margin-bottom: 1rem;
         }
 
-        /* Элементы управления корзиной */
+        /* Элементы управления */
         .cart-controls {
             display: flex;
             flex-direction: column;
@@ -236,7 +236,7 @@
     </footer>
 
     <script>
-        // Данные товаров
+        
         const products = [
             {
                 id: 1,
@@ -380,16 +380,16 @@
             }
         ];
 
-        // Инициализация корзины
+    
         let cart = JSON.parse(localStorage.getItem('cart')) || {};
 
-        // Функция обновления счетчика корзины
+       
         function updateCartCount() {
             const total = Object.values(cart).reduce((sum, count) => sum + count, 0);
             document.querySelectorAll('.cart-count').forEach(el => el.textContent = total);
         }
 
-        // Генерация карточек товаров
+        
         function generateProductCards() {
             const container = document.getElementById('products-container');
             container.innerHTML = products.map(product => `
@@ -415,7 +415,7 @@
             `).join('');
         }
 
-        // Обработчик событий для всей страницы
+        
         function handleCartActions(e) {
             const card = e.target.closest('.product-card');
             if (!card) return;
@@ -450,12 +450,12 @@
             }
         }
 
-        // Инициализация
+       
         document.addEventListener('DOMContentLoaded', () => {
             generateProductCards();
             updateCartCount();
             
-            // Восстановление состояния корзины
+           
             products.forEach(product => {
                 const card = document.querySelector(`[data-product-id="${product.id}"]`);
                 if (card && cart[product.id] > 0) {
@@ -465,7 +465,7 @@
                 }
             });
 
-            // Подключение обработчика
+            
             document.addEventListener('click', handleCartActions);
         });
     </script>
