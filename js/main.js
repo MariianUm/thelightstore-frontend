@@ -1,48 +1,66 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Обработчики для кнопок "В корзину"
-    const addToCartButtons = document.querySelectorAll('.btn-add-to-cart');
-    addToCartButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const productCard = this.closest('.product-card');
-            const productName = productCard.querySelector('h3').textContent;
-            alert(`Товар "${productName}" добавлен в корзину`);
-            updateCartCount(1);
-        });
-    });
+import { fetchAllProducts } from '../api/products.js';
 
-    // Обновление счетчика корзины
-    function updateCartCount(change) {
-        const cartCount = document.querySelector('.cart-count');
-        if (cartCount) {
-            let currentCount = parseInt(cartCount.textContent) || 0;
-            cartCount.textContent = currentCount + change;
-        }
+document.addEventListener('DOMContentLoaded', async () => {
+    let cart = JSON.parse(localStorage.getItem('cart')) || {};
+    const container = document.getElementById('products-container');
+    const countElement = document.querySelectorAll('.cart-count');
+
+    try {
+        const products = await fetchAllProducts();
+        localStorage.setItem('products', JSON.stringify(products));
+
+        container.innerHTML = products.map(product => `
+            <div class="product-card" data-product-id="${product.id}">
+                <a href="product.html?id=${product.id}" class="product-image-link">
+                    <img src="img/${product.image_url}" alt="${product.name}" class="product-image">
+                </a>
+                <div class="product-info">
+                    <h3 class="product-title">${product.name}</h3>
+                    <p class="product-price">${product.price} ₽</p>
+                    <div class="cart-controls">
+                        <button class="add-to-cart">В корзину</button>
+                        <div class="quantity-container" style="display: none;">
+                            <button class="quantity-btn minus">-</button>
+                            <span class="product-count">0</span>
+                            <button class="quantity-btn plus">+</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        document.addEventListener('click', (e) => {
+            const card = e.target.closest('.product-card');
+            if (!card) return;
+
+            const id = card.dataset.productId;
+            if (e.target.classList.contains('add-to-cart')) {
+                cart[id] = (cart[id] || 0) + 1;
+                card.querySelector('.add-to-cart').style.display = 'none';
+                card.querySelector('.quantity-container').style.display = 'flex';
+                card.querySelector('.product-count').textContent = cart[id];
+            } else if (e.target.classList.contains('plus')) {
+                cart[id]++;
+                card.querySelector('.product-count').textContent = cart[id];
+            } else if (e.target.classList.contains('minus')) {
+                cart[id] = Math.max(0, cart[id] - 1);
+                if (cart[id] === 0) {
+                    delete cart[id];
+                    card.querySelector('.add-to-cart').style.display = 'block';
+                    card.querySelector('.quantity-container').style.display = 'none';
+                } else {
+                    card.querySelector('.product-count').textContent = cart[id];
+                }
+            }
+
+            localStorage.setItem('cart', JSON.stringify(cart));
+            const total = Object.values(cart).reduce((a, b) => a + b, 0);
+            countElement.forEach(c => c.textContent = total);
+        });
+
+        const total = Object.values(cart).reduce((a, b) => a + b, 0);
+        countElement.forEach(c => c.textContent = total);
+    } catch (err) {
+        container.innerHTML = '<p style="color: red;">Ошибка загрузки товаров</p>';
     }
-
-    // Удаление товаров из корзины
-    const removeButtons = document.querySelectorAll('.btn-remove');
-    removeButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            this.closest('tr').remove();
-            updateCartTotal();
-        });
-    });
-
-    // Пересчет общей суммы
-    function updateCartTotal() {
-        let total = 0;
-        document.querySelectorAll('.cart-table tbody tr').forEach(row => {
-            const price = parseFloat(row.querySelector('.product-price').textContent);
-            const quantity = parseInt(row.querySelector('.quantity-input').value);
-            const rowTotal = price * quantity;
-            row.querySelector('.product-total').textContent = `${rowTotal} руб.`;
-            total += rowTotal;
-        });
-        document.querySelector('.total-price').textContent = `${total} руб.`;
-    }
-
-    // Изменение количества
-    document.querySelectorAll('.quantity-input').forEach(input => {
-        input.addEventListener('change', updateCartTotal);
-    });
 });
